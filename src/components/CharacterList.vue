@@ -22,6 +22,10 @@
   <input type="search" v-model="searchValue" />
   <input type="text" v-model="page" />
   <button @click="reload">search</button>
+  <div v-if="isLoading">
+    CZEKAJ!
+  </div>
+  <template v-else>
   <div>
     <ul>
       <li v-for="character in list" :key="character.id">
@@ -36,6 +40,7 @@
         />-->
 
   </div>
+  </template>
   <!--
       <button @click="toggleExpand">{{ searchOptions.value.searchKey.value }}</button>
       <div v-if="isSearchKeyExpanded.value">
@@ -56,33 +61,98 @@
 
 <script>
 
-import { useCharactersSearch } from "@/componsable/useCharacters";
+import { useSearch, useSearchCharacters } from "@/componsable/useCharacters";
 import { computed, ref } from "vue";
+
 
 const NAME_SEARCH_KEY = "name";
 const EPISODE_SEARCH_KEY = "episode";
-const IDENTIFIER_SEARCH_KEY = "identifier"
-const API = `https://rickandmortyapi.com/api/`
+const IDENTIFIER_SEARCH_KEY = "identifier";
 export default {
   name: "CharacterList",
-  methods: {
-    /* async search() {
-       BASE_URL.searchParams.set("page", this.searchOptions.value.page.value);
-       BASE_URL.searchParams.set("name", this.searchOptions.value.searchValue.value);
-       BASE_URL.searchParams;
-       await axios.get(BASE_URL.toString()).then((response) => {
-         this.searchOptions.value.count = response.data.info.count;
-         this.searchOptions.value.pages = response.data.info.pages;
-         this.characters = response.data.results;
-       });
-     }*/
-  },
+  methods: {},
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  setup () {
-    // eslint-disable-next-line @typescript-eslint/ban-types
+  setup() {
     const searchValue = ref("");
     const searchKey = ref(NAME_SEARCH_KEY);
     const page = ref(1);
+    const query = computed(() => {
+      if (searchKey.value === EPISODE_SEARCH_KEY) {
+        return {
+          query: `{
+   episodes (filter: {episode: "${searchValue.value}"}){
+    info {
+      count
+    }
+    results {
+      name,
+      episode,
+      characters {
+        name,
+        image,
+        gender,
+        species,
+        episode{
+          episode
+        }
+      }
+    }
+  }
+}`
+        };
+      }
+      return {
+        query: `{
+   characters( filter: { name: "${searchValue.value}"}) {
+    info {
+      count
+    }
+    results {
+      name,
+      image,
+     	gender,
+      species,
+      episode {
+        episode
+      }
+    }
+  }
+  }`
+      };
+    });
+    const { result: list, isLoading, error, reload } = useSearchCharacters(query);
+
+    reload();
+    return {
+      list,
+      reload,
+      isLoading,
+      error,
+      searchValue,
+      searchKey,
+      page,
+      NAME_SEARCH_KEY,
+      EPISODE_SEARCH_KEY,
+      IDENTIFIER_SEARCH_KEY,
+      query
+    };
+  }
+
+  /*// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    setup() {
+      const  {
+        fetchCharacters,
+        characters
+      } = useCharacters()
+
+      await fetchCharacters()
+
+      return{
+        characters
+      }
+
+    }*/
+
   /*  const searchParam = computed(() => {
       if (searchKey.value === "name") {
         return `name=`;
@@ -102,53 +172,24 @@ export default {
       }
       return `?page=${page.value}&`
     })*/
-    const url = computed(() => {
-      console.log('computed tera')
-      const url = new URL(`${API}`);
-      if (searchKey.value !== EPISODE_SEARCH_KEY) {
-        url.href = url.href + "character/";
-      }
-      if(searchKey.value === NAME_SEARCH_KEY){
-        console.log('searchValue.value === NAME_SEARCH_KEY')
-        url.searchParams.append("name", searchValue.value);
-      }
-      if(searchKey.value !== IDENTIFIER_SEARCH_KEY){
-        url.searchParams.append('page', page.value.toString())
-      }else {
-        url.href = url.href + searchValue.value
-      }
-      return url;
-    });
+  /* const url = computed(() => {
+     console.log('computed tera')
+     const url = new URL(`${API}`);
+     if (searchKey.value !== EPISODE_SEARCH_KEY) {
+       url.href = url.href + "character/";
+     }
+     if(searchKey.value === NAME_SEARCH_KEY){
+       console.log("searchValue.value === NAME_SEARCH_KEY");
+       url.searchParams.append("name", searchValue.value);
+     }
+     if (searchKey.value !== IDENTIFIER_SEARCH_KEY) {
+       url.searchParams.append("page", page.value.toString());
+     } else {
+       url.href = url.href + searchValue.value;
+     }
+     return url;
+   });*/
 
-    const { result: list, isLoading, error, reload } = useCharactersSearch(url);
-    reload();
-    return {
-      list,
-      reload,
-      isLoading,
-      error,
-      searchValue,
-      searchKey,
-      page,
-      NAME_SEARCH_KEY,
-      EPISODE_SEARCH_KEY,
-      IDENTIFIER_SEARCH_KEY
-    };
-  }
-
-  /*// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    setup() {
-      const  {
-        fetchCharacters,
-        characters
-      } = useCharacters()
-
-      await fetchCharacters()
-
-      return{
-        characters
-      }
-    }*/
 };
 </script>
 
