@@ -1,42 +1,48 @@
 <template>
-  <ul class="pagination" v-if="totalPages > 1">
-    <li class="pagination-item">
-      <button
-        type="button"
-        @click="onClickPreviousPage"
-        :disabled="isInFirstPage"
-      >
-        &#60;
-      </button>
-    </li>
-    <li
-      v-for="page in pages"
-      :key="page.name"
-      class="pagination-item"
-    >
-      <button
-        type="button"
-        @click="page.name === '...'? onClickShowPagesInput(): onClickPage(page.name)"
-        :disabled="page.isDisabled"
-        :class="{ active: isPageActive(page.name) }"
-      >
-        {{ page.name }}
-      </button>
-    </li>
-    <li v-if="showPagesInput">
-      <input type="number" v-model="manuallySelectedPage">
-      <button @click="onClickPage(manuallySelectedPage)">Go to page</button>
-    </li>
-    <li class="pagination-item">
-      <button
-        type="button"
-        @click="onClickNextPage"
-        :disabled="isInLastPage"
-      >
+  <div class="container">
+    <ul class="pagination" v-if="totalPages > 1">
+      <li class="pagination-item">
+        <button
+          type="button"
+          class="page-btn page-btn--change-page"
+          @click="onClickPreviousPage"
+          :disabled="isInFirstPage"
         >
-      </button>
-    </li>
-  </ul>
+          &#9668;
+        </button>
+      </li>
+      <li
+        v-for="page in pages"
+        :key="page.name"
+        class="pagination-item"
+      >
+        <button
+          type="button"
+          class="page-btn page-btn--number"
+          @click="page.name === '...'? onClickShowPagesInput(): onClickPage(page.name)"
+          :disabled="page.isDisabled"
+          :class="{ active: isPageActive(page.name) }"
+        >
+          {{ page.name }}
+        </button>
+      </li>
+      <li v-if="showPagesInput">
+        <input style="width: 60px" type="number" v-model="manuallySelectedPage">
+        <button style="background-color: #11B0C8" @click="onClickPage(manuallySelectedPage)">Go to page</button>
+      </li>
+      <li class="pagination-item">
+        <button
+          type="button"
+          class="page-btn page-btn--change-page"
+          @click="onClickNextPage"
+          :disabled="isInLastPage"
+        >
+          &#9658;
+        </button>
+      </li>
+    </ul>
+  </div>
+
 </template>
 
 <script>
@@ -144,7 +150,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .pagination {
   list-style-type: none;
 }
@@ -152,9 +158,22 @@ export default {
 .pagination-item {
   display: inline-block;
 }
+.page-btn {
+  margin: 0 8px;
+  height: 40px;
+  width: 40px;
+  border-radius: 5px;
+  background-color: white;
+  border: solid 2px #A9B1BD;
+  color: #A9B1BD;
+
+  &--change-page {
+    color: #11B0C8;
+  }
+}
 
 .active {
-  background-color: #4AAE9B;
+  background-color: #11B0C8;
   color: #ffffff;
 }
 </style>

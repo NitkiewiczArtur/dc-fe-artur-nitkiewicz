@@ -1,6 +1,6 @@
 <template>
 <div>
-  <img class="logo" src="../assets/logo.png" alt="logo">
+
 </div>
 </template>
 
@@ -12,6 +12,7 @@ export default {
 
 <style scoped lang="scss">
 .logo{
-  height: 10vh;
+  width: 12.5vw;
+  height: 6.4vh;
 }
 </style>

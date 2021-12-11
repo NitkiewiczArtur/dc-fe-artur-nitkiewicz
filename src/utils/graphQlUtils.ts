@@ -1,5 +1,5 @@
-const NAME_SEARCH_KEY = "name";
-const EPISODE_SEARCH_KEY = "episode";
+const NAME_SEARCH_KEY = "Name";
+const EPISODE_SEARCH_KEY = "Episode";
 
 export function isByEpisodeSearch(searchKey: string): boolean{
   return searchKey === EPISODE_SEARCH_KEY
@@ -17,9 +17,11 @@ export function getSearchCharactersByEpisodeQuery(episode: string): Record<strin
       count
     }
     results {
+      id,
       name,
       episode,
       characters {
+        id,
         name,
         image,
         gender,
@@ -41,6 +43,7 @@ export function getSearchCharactersByNameQuery(name: string, page:number): Recor
       count
     }
     results {
+      id,
       name,
       image,
      	gender,
@@ -57,7 +60,8 @@ export function getFindCharacterByIdQuery(id: string): Record<string, unknown> {
  return {
    query: `{
      character(id:"${id}") {
-       name,
+         id,
+         name,
          image,
          gender,
          species,

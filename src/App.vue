@@ -1,15 +1,28 @@
 <template>
-  <div class="container">
-    <router-view />
+  <div id="app">
+    <character-list></character-list>
   </div>
 </template>
 
 <style lang="scss">
-.container {
-  display: flex;
-  flex-direction: column;
+#app {
+  color: #A9B1BD;
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
 }
-/*#app {
+.blue {
+  color: #11B0C8;
+}
+.blue-background {
+
+}
+.table{
+  color: #A9B1BD;
+}
+
+/*
+#11B0C8
+#app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -30,3 +43,9 @@
   }
 }*/
 </style>
+<script>
+import CharacterList from "@/components/CharacterList";
+export default {
+  components: { CharacterList }
+}
+</script>
