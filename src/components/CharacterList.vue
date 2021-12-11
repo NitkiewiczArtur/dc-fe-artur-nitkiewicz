@@ -1,14 +1,29 @@
 <template>
-  <span>name</span>
-  <input type="radio" v-model="searchKey" v-bind:value="NAME_SEARCH_KEY" checked>
-  <span>episode</span>
-  <input type="radio" v-model="searchKey" v-bind:value="EPISODE_SEARCH_KEY">
-  <br>
-  <span>identifier</span>
-  <input type="radio" v-model="searchKey" v-bind:value="IDENTIFIER_SEARCH_KEY">
-  <br>
-  <input type="search" v-model="searchValue" />
-  <button @click="searchFromStart">search</button>
+  <div class="searchBar">
+    <ul>
+      <li><span>Search by</span></li>
+      <li><span v-text="searchKey" />
+        <ul class="dropdown">
+          <li><span @click="setSearchKey(NAME_SEARCH_KEY)">Name</span>
+          </li>
+          <li>
+            <span @click="setSearchKey(EPISODE_SEARCH_KEY)">Episode</span>
+          </li>
+          <li>
+            <span @click="setSearchKey(IDENTIFIER_SEARCH_KEY)">Identifier</span>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <input type="search" v-model="searchValue" />
+      </li>
+      <li><span @click="searchFromStart"><i class="material-icons s" aria-hidden="true"
+      >search</i
+      ></span></li>
+    </ul>
+  </div>
+
+
   <div v-if="isLoading">
     <img height="220" src="../assets/working-morty.png" alt="Image of exhausted Morty">
   </div>
@@ -16,11 +31,12 @@
     {{ error }}
     <img height="220" src="../assets/wrong-morty.png" alt="Image of confused Morty">
   </div>
+
   <div v-else>
     <div>
       <ul>
         <li v-for="character in charactersToDisplay" :key="character.id">
-          <span>{{ character.id }},{{ character.name }}</span>
+          <span>{{ character.name }}</span>
         </li>
       </ul>
     </div>
@@ -31,6 +47,65 @@
     @pagechanged="onPageChange"
   />
 </template>
+<style scoped lang="scss">
+.searchBar{
+  height: 10vh;
+  width: 50vw;
+  padding: 0;
+}
+.searchBar span{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  text-decoration: none;
+
+  /*
+  display: inline-flex;
+  background-color: #4AAE9B;
+  padding: 11px;
+  justify-content: center;
+  border: solid 2px black;*/
+}
+.searchBar ul {
+    list-style: none;
+    display: flex;
+  padding: 0;
+  border-radius: 25px;
+  border: solid 2px black;
+}
+.searchBar li{
+  position: relative;
+  width: 100%;
+  text-align: center;
+  width: auto;
+  border-right: solid 2px black;
+}
+.searchBar li:hover .dropdown > li{
+  display: block;
+  top: 0;
+}
+.dropdown li{
+  display: none;
+  position: relative;
+}
+.dropdown{
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.dropdown {
+  display: flex;
+  flex-direction: column;
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+  }
+}
+</style>
 
 <script>
 
@@ -90,6 +165,13 @@ export default {
     };
     search();
 
+    const setSearchKey = (searchKeyToSet) => {
+      searchKey.value = searchKeyToSet;
+    };
+    const showSearchBy = ref(false);
+    const toggleShowSearchBy = () => {
+      showSearchBy.value = !showSearchBy.value;
+    };
     return {
       onPageChange,
       searchFromStart,
@@ -100,12 +182,13 @@ export default {
       searchKey,
       isLoading,
       error,
+      showSearchBy,
+      toggleShowSearchBy,
+      setSearchKey,
       NAME_SEARCH_KEY,
       EPISODE_SEARCH_KEY,
-      IDENTIFIER_SEARCH_KEY,
+      IDENTIFIER_SEARCH_KEY
     };
   }
 };
 </script>
-
-<style scoped></style>
