@@ -31,15 +31,10 @@
     </div>
   </div>
 
-  <div v-if="isLoading">
-    <img height="220" src="../assets/working-morty.png" alt="Image of exhausted Morty">
-  </div>
-  <div v-else-if="error">
-    {{ error }}
-    <img height="220" src="../assets/wrong-morty.png" alt="Image of confused Morty">
-  </div>
 
-  <div v-else>
+
+    <switch-field @fieldSwitched="onFieldSwitched" :values="[ALL_CHARACTERS, FAVOURITES]"></switch-field>
+
     <div class="table-wrap">
           <table class="table table-borderless">
             <thead class="color-blue">
@@ -55,7 +50,9 @@
               <th></th>
             </tr>
             </thead>
+
             <tbody>
+
             <tr class="border-bottom" v-for="character in charactersToDisplay" :key="character.id">
               <td style="padding-left: 5vw"></td>
               <td>
@@ -74,8 +71,16 @@
               <td>
                 {{character.episode[character.episode.length-1].episode}}
               </td>
-              <td>
-                <button class="favourite-btn">
+              <td v-if="isFavourite(character)">
+                <button class="favourite-btn favourite-btn--isFavourite"
+                        @click="removeFromFavourites(character)">
+                  <i class="material-icons s" aria-hidden="true">star
+                  </i>
+                </button>
+              </td>
+              <td v-else>
+                <button class="favourite-btn"
+                        @click="addToFavourites(character)">
                   <i class="material-icons s" aria-hidden="true">star
                   </i>
                 </button>
@@ -84,8 +89,18 @@
             </tr>
             </tbody>
           </table>
+
+        <div class="container" v-if="isLoading">
+          <img width="1000" src="../assets/zmiana-programu.jpg" alt="Image of exhausted Morty">
+        </div>
+        <div class="container" v-else-if="error">
+          {{ error }}
+          <img src="../assets/wrong-morty.jpg" alt="Image of confused Morty">
+        </div>
+
+
     </div>
-  </div>
+
   <pagination
     :totalPages="totalPages"
     :currentPage="currentPage"
@@ -106,15 +121,20 @@ import {
   isByNameSearch
 } from "@/utils/graphQlUtils";
 import Pagination from "./Pagination";
+import _ from "lodash";
+import SwitchField from "@/components/SwitchField";
 
 const NAME_SEARCH_KEY = "Name";
 const EPISODE_SEARCH_KEY = "Episode";
 const IDENTIFIER_SEARCH_KEY = "Identifier";
 const ITEMS_PER_PAGE = 20;
+const ALL_CHARACTERS = 'All Characters'
+const FAVOURITES = 'Favourites'
 
 export default {
   name: "CharacterList",
   components: {
+    SwitchField,
     Pagination,
   },
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -122,6 +142,9 @@ export default {
     const currentPage = ref(1);
     const searchValue = ref("");
     const searchKey = ref(NAME_SEARCH_KEY);
+    const favouriteCharacters = ref([]);
+    const currentlyOpenedTab = ref('All Characters');
+const key2 = ref('All Characters')
     const query = computed(() => {
       if (isByEpisodeSearch(searchKey.value)) {
         return getSearchCharactersByEpisodeQuery(searchValue.value);
@@ -131,8 +154,13 @@ export default {
       }
       return getFindCharacterByIdQuery(searchValue.value);
     });
-    const charactersToDisplay = computed(() =>
-      charactersListPerPageList.value.length ? charactersListPerPageList.value[currentPage.value - 1] : charactersList.value);
+    const charactersToDisplay = computed(() => {
+      if (currentlyOpenedTab.value === FAVOURITES) {
+        return favouriteCharacters.value;
+      } else {
+        return charactersListPerPageList.value.length ? charactersListPerPageList.value[currentPage.value - 1] : charactersList.value;
+      }
+    });
     const totalPages = computed(() => Math.ceil(count.value / ITEMS_PER_PAGE));
 
     const {
@@ -146,35 +174,60 @@ export default {
         search();
       }
     };
+    const onFieldSwitched = (selectedValue) => {
+      if(selectedValue === FAVOURITES) {
+        currentlyOpenedTab.value = FAVOURITES;
+      }else{
+        currentlyOpenedTab.value = ALL_CHARACTERS;
+      }
+    }
     const searchFromStart = () => {
       currentPage.value = 1;
       search();
     };
-    search();
-
     const setSearchKey = (searchKeyToSet) => {
       searchKey.value = searchKeyToSet;
     };
-    const showSearchBy = ref(false);
-    const toggleShowSearchBy = () => {
-      showSearchBy.value = !showSearchBy.value;
-    };
+    const isFavourite = (characterToFind) => {
+      return favouriteCharacters.value.find(character => character.id === characterToFind.id)
+    }
+    const addToFavourites = (character) => {
+      favouriteCharacters.value.push(character)
+      favouriteCharacters.value =_.uniqBy(favouriteCharacters.value, 'id');
+      localStorage.setItem("favouriteCharacters", JSON.stringify(favouriteCharacters.value))
+    }
+    const removeFromFavourites = (characterToRemove) => {
+      favouriteCharacters.value = favouriteCharacters.value.filter(character => character.id !== characterToRemove.id)
+      localStorage.setItem("favouriteCharacters", JSON.stringify(favouriteCharacters.value))
+    }
+
+
+    favouriteCharacters.value = JSON.parse(localStorage.getItem("favouriteCharacters") || "[]");
+    search();
+
     return {
-      onPageChange,
-      searchFromStart,
+      key2,
       charactersToDisplay,
       currentPage,
+      currentlyOpenedTab,
       totalPages,
       searchValue,
       searchKey,
       isLoading,
       error,
-      showSearchBy,
-      toggleShowSearchBy,
+      favouriteCharacters,
+      isFavourite,
+      onPageChange,
+      onFieldSwitched,
       setSearchKey,
+      searchFromStart,
+      addToFavourites,
+      removeFromFavourites,
       NAME_SEARCH_KEY,
       EPISODE_SEARCH_KEY,
-      IDENTIFIER_SEARCH_KEY
+      IDENTIFIER_SEARCH_KEY,
+      ALL_CHARACTERS,
+      FAVOURITES
     };
   }
 };
@@ -194,6 +247,11 @@ export default {
   border: #11B0C8 solid 3px;
   border-radius: 5px;
   padding-top: 7px;
+  &--isFavourite {
+    background-color: #11B0C8;
+    border: #11B0C8 solid 3px;
+    color: white;
+  }
 }
 
 .border-bottom {

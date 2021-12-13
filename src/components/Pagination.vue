@@ -81,10 +81,6 @@ export default {
     });
     const pages = computed(() => {
       const range = [];
-      console.log(startPage.value)
-      console.log('startPage.value + props.maxVisibleButtons) !== props.totalPages ?' + ((startPage.value + props.maxVisibleButtons) !== props.totalPages) )
-      console.log('startPage.value + props.maxVisibleButtons - 1 = ' + (startPage.value + props.maxVisibleButtons - 1))
-      console.log(' props.totalPages = ' +  props.totalPages)
 
       for (let i = startPage.value; i <= (
         (startPage.value + props.maxVisibleButtons) !== props.totalPages ?
