@@ -14,7 +14,7 @@
         </ul>
       </li>
       <li class="searchBar__item">
-        <div class="">
+        <div>
           <input type="search" v-model="searchValue" />
           <span class="searchBar__text" @click="onSearchFromStart">
         <i class="material-icons s blue" aria-hidden="true">search</i>
@@ -31,11 +31,8 @@ import { ref } from "vue";
 export default {
   name: "SearchBar",
   props: {
-    searchKeys:{
-      type: [],
-    }
+    searchKeys:[],
   },
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   setup(props, {emit}){
     const selectedSearchKey = ref(props.searchKeys[0])
     const searchValue = ref('')
@@ -43,7 +40,7 @@ export default {
       selectedSearchKey.value = key
     }
     const onSearchFromStart = () => {
-      emit('searchClicked', selectedSearchKey.value, searchValue.value)
+      emit('searchClicked', selectedSearchKey, searchValue)
     }
     return{
       selectedSearchKey,
@@ -90,12 +87,11 @@ export default {
     }
     & input {
       margin-left: 20px;
+      width: 200px;
       outline: none;
       border: none;
     }
-    & i {
 
-    }
     &--title {
       width: 124px;
       text-align: center;
