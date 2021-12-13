@@ -4,7 +4,6 @@
       <div class="col-12 col-lg-3 col-xl-3">
       <img class="logo" src="../assets/logo.png" alt="logo">
       </div>
-
       <div class="col-12 col-lg-6 col-xl-4">
       <search-bar :search-keys="[NAME_SEARCH_KEY, EPISODE_SEARCH_KEY, IDENTIFIER_SEARCH_KEY]" @searchClicked="onSearchClicked"></search-bar>
       </div>
@@ -14,7 +13,7 @@
     </div>
   </div>
       <div class="table-wrap">
-          <table class="table table-borderless">
+          <table class="table table-borderless font-color">
             <thead class="color-blue">
             <tr>
               <th></th>
@@ -32,7 +31,7 @@
             <tr class="border-bottom" v-for="character in charactersToDisplay" :key="character.id">
               <td style="padding-left: 5vw"></td>
               <td>
-                <img style="height: 60px" :src="character.image" alt="character img">
+                <img style="height: 68px;" :src="character.image" alt="character img">
               </td>
               <td>{{character.id}}</td>
               <td>
@@ -112,7 +111,7 @@ export default {
     SwitchField,
     Pagination,
   },
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+
   setup() {
     const currentPage = ref(1);
     const searchValue = ref("");
@@ -173,8 +172,6 @@ export default {
       currentPage,
       currentlyOpenedTab,
       totalPages,
-      searchValue,
-      searchKey,
       isLoading,
       error,
       favouriteCharacters,
@@ -220,7 +217,6 @@ export default {
   border-bottom: #A9B1BD solid 0.25px;
 }
 
-
 .logo{
   width: 240px;
   height: 70px;
@@ -228,10 +224,7 @@ export default {
 .header {
   margin: 32px 20px;
 }
-/*.searchBar li:hover .dropdown > li {
-  display: block;
-  top: 0;
-}*/
+
 @media (max-width: 767px) {
   .searchBar{
     left: 80px;

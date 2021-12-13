@@ -65,8 +65,6 @@ export default {
       required: true
     },
   },
-
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   setup(props, {emit}) {
     const showPagesInput = ref(false);
     const manuallySelectedPage = ref(null)
@@ -135,12 +133,12 @@ export default {
       showPagesInput,
       isInFirstPage,
       isInLastPage,
+      manuallySelectedPage,
       onClickPreviousPage,
       onClickNextPage,
       onClickPage,
       onClickShowPagesInput,
-      isPageActive,
-      manuallySelectedPage
+      isPageActive
     };
   },
 };

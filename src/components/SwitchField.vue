@@ -1,5 +1,5 @@
 <template>
-  <div class="switch-field">
+  <div class="switch-field font-color">
     <input type="radio" :id="firstValue" v-model="selectedValue" :value="firstValue" checked />
     <label :for="firstValue">{{ firstValue }}</label>
     <template v-for="value in restOfValues" :key="value">
@@ -19,7 +19,6 @@ export default {
       required: true
     }
   },
-  // eslint-disable-next-line vue/no-setup-props-destructure
   setup(props, { emit }) {
     const selectedValue = ref(null);
     const firstValue = computed(()=> props.values[0])

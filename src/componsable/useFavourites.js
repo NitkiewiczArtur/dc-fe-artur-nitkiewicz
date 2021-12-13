@@ -1,8 +1,5 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 import _ from "lodash";
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function useFavourites(favouriteCharacters) {
   const initFavourites = () => {
     favouriteCharacters.value = JSON.parse(localStorage.getItem("favouriteCharacters") || "[]");
