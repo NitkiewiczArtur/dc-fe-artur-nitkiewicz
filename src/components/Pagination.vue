@@ -113,13 +113,13 @@ export default {
     });
 
     const onClickPreviousPage = () => {
-     onClickPage(props.currentPage - 1);
+      onClickPage(props.currentPage - 1);
     };
     const onClickNextPage = () => {
-      onClickPage( props.currentPage + 1)
+      onClickPage(props.currentPage + 1);
     };
     const onClickPage = (page) => {
-      showPagesInput.value = false
+      showPagesInput.value = false;
       emit("pagechanged", page);
     };
     const onClickShowPagesInput = () => {

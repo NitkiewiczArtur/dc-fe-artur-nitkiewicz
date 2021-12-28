@@ -1,18 +1,16 @@
 <template>
-  <div class="container">
-    <div class="row header">
-      <div class="col-12 col-lg-3 col-xl-3">
+  <div class="navbar-wrapper">
       <img class="logo" src="../assets/logo.png" alt="logo">
-      </div>
-      <div class="col-12 col-lg-6 col-xl-4">
-      <search-bar :search-keys="[NAME_SEARCH_KEY, EPISODE_SEARCH_KEY, IDENTIFIER_SEARCH_KEY]" @searchClicked="onSearchClicked"></search-bar>
-      </div>
-    <div class="row">
+    <div class="">
+      <search-bar :search-keys="[NAME_SEARCH_KEY, EPISODE_SEARCH_KEY, IDENTIFIER_SEARCH_KEY]"
+                  @searchClicked="onSearchClicked"></search-bar>
+    </div>
+    <div class="switch-field-container">
       <switch-field @fieldSwitched="onFieldSwitched" :values="[ALL_CHARACTERS, FAVOURITES]"></switch-field>
     </div>
-    </div>
   </div>
-      <div class="table-wrap">
+
+  <div class="table-wrap fixed-height">
           <table class="table table-borderless font-color">
             <thead class="color-blue">
             <tr>
@@ -65,21 +63,151 @@
             </tbody>
           </table>
         <div class="container" v-if="isLoading">
-          <img width="1000" src="../assets/zmiana-programu.jpg" alt="Image of exhausted Morty">
+          <img class="image" src="../assets/zmiana-programu.jpg" alt="Image of exhausted Morty">
         </div>
         <div class="container" v-else-if="error">
           {{ error }}
-          <img src="../assets/wrong-morty.jpg" alt="Image of confused Morty">
+          <img class="image" src="../assets/wrong-morty.jpg" alt="Image of confused Morty">
         </div>
-    </div>
+  </div>
 
   <pagination v-show="currentlyOpenedTab !== FAVOURITES"
-    :totalPages="totalPages"
-    :currentPage="currentPage"
-    @pagechanged="onPageChange"
+              :totalPages="totalPages"
+              :currentPage="currentPage"
+              :max-visible-buttons="screenWidth > 480? 4: 1"
+              @pagechanged="onPageChange"
   />
 
 </template>
+
+<style scoped lang="scss">
+
+.image{
+  width: 100%;
+}
+
+.fixed-height{
+  height: 100%;
+}
+.navbar-wrapper {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.switch-field-container {
+ margin-top:30px;
+}
+
+.logo {
+  width: 240px;
+  height: 70px;
+  margin: 40px 0 30px 20px;
+}
+@media screen and (min-width: 550px){
+  .navbar-wrapper {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+@media screen and (min-width: 810px) {
+  .switch-field-container {
+    margin-top:0;
+    position: absolute;
+    top: 150px
+  }
+  .navbar-wrapper{
+    flex-direction:row;
+    padding-bottom: 50px;
+    margin: 32px 0 50px 50px;
+    justify-content: initial;
+  }
+  .logo{
+    margin: 0 40px 0 0;
+  }
+}
+
+.color-blue {
+  background-color: rgb(229, 234, 244, 0.25)
+}
+
+.favourite-btn {
+  width: 40px;
+  height: 40px;
+  background-color: white;
+  color: #11B0C8;
+  border: #11B0C8 solid 3px;
+  border-radius: 5px;
+  padding-top: 7px;
+
+  &--isFavourite {
+    background-color: #11B0C8;
+    border: #11B0C8 solid 3px;
+    color: white;
+  }
+}
+
+.border-bottom {
+  border-bottom: #A9B1BD solid 0.25px;
+}
+
+@media (max-width: 767px) {
+  .searchBar {
+    left: 80px;
+    top: 138px;
+  }
+  .table-wrap table,
+  .table-wrap thead,
+  .table-wrap tbody,
+  .table-wrap th,
+  .table-wrap td,
+  .table-wrap tr {
+    display: block;
+  }
+  .table-wrap thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+  .table-wrap td {
+    border: none;
+    border-bottom: 1px solid #eee;
+    position: relative;
+    padding-left: 40% !important;
+    white-space: normal;
+    text-align: left;
+  }
+  .table-wrap td:before {
+    position: absolute;
+    top: 8px;
+    left: 15px;
+    width: 45%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: left;
+    font-weight: bold;
+  }
+  .table-wrap td:first-child {
+    padding-top: 17px;
+  }
+  .table-wrap td:last-child {
+    padding-bottom: 16px;
+  }
+  .table-wrap td:first-child:before {
+    top: 17px;
+  }
+  .table-wrap td:before {
+    content: attr(data-title);
+  }
+  .table tbody tr {
+    border-top: 1px solid #ddd;
+  }
+  .table tbody tr td {
+    border: none;
+  }
+}
+</style>
 
 <script>
 
@@ -137,6 +265,7 @@ export default {
       }
     });
     const totalPages = computed(() => Math.ceil(count.value / ITEMS_PER_PAGE));
+    const screenWidth = computed(() => window.innerWidth);
 
     const {
       charactersList, charactersListPerPageList, count,
@@ -175,6 +304,7 @@ export default {
       isLoading,
       error,
       favouriteCharacters,
+      screenWidth,
       isFavourite,
       onPageChange,
       onFieldSwitched,
@@ -191,94 +321,4 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
 
-.color-blue {
-  background-color: rgb(229, 234, 244, 0.25)
-}
-
-.favourite-btn {
-  width: 40px;
-  height: 40px;
-  background-color: white;
-  color: #11B0C8;
-  border: #11B0C8 solid 3px;
-  border-radius: 5px;
-  padding-top: 7px;
-
-  &--isFavourite {
-    background-color: #11B0C8;
-    border: #11B0C8 solid 3px;
-    color: white;
-  }
-}
-
-.border-bottom {
-  border-bottom: #A9B1BD solid 0.25px;
-}
-
-.logo{
-  width: 240px;
-  height: 70px;
-}
-.header {
-  margin: 32px 20px;
-}
-
-@media (max-width: 767px) {
-  .searchBar{
-    left: 80px;
-    top: 138px;
-  }
-  .table-wrap table,
-  .table-wrap thead,
-  .table-wrap tbody,
-  .table-wrap th,
-  .table-wrap td,
-  .table-wrap tr {
-    display: block;
-  }
-  .table-wrap thead tr {
-    position: absolute;
-    top: -9999px;
-    left: -9999px;
-  }
-  .table-wrap td {
-    border: none;
-    border-bottom: 1px solid #eee;
-    position: relative;
-    padding-left: 50%!important;
-    white-space: normal;
-    text-align: left;
-  }
-  .table-wrap td:before {
-    position: absolute;
-    top: 8px;
-    left: 15px;
-    width: 45%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    text-align: left;
-    font-weight: bold;
-  }
-  .table-wrap td:first-child {
-    padding-top: 17px;
-  }
-  .table-wrap td:last-child {
-    padding-bottom: 16px;
-  }
-  .table-wrap td:first-child:before {
-    top: 17px;
-  }
-  .table-wrap td:before {
-    content: attr(data-title);
-  }
-  .table tbody tr {
-    border-top: 1px solid #ddd;
-  }
-  .table tbody tr td {
-    border: none;
-  }
-}
-</style>
