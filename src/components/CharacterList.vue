@@ -2,7 +2,7 @@
   <div class="navbar-wrapper">
       <img class="logo" src="../assets/logo.png" alt="logo">
     <div class="">
-      <search-bar :search-keys="[NAME_SEARCH_KEY, EPISODE_SEARCH_KEY, IDENTIFIER_SEARCH_KEY]"
+      <search-bar :search-keys="searchKeys"
                   @searchClicked="onSearchClicked"></search-bar>
     </div>
     <div class="switch-field-container">
@@ -74,29 +74,145 @@
   <pagination v-show="currentlyOpenedTab !== FAVOURITES"
               :totalPages="totalPages"
               :currentPage="currentPage"
-              :max-visible-buttons="screenWidth > 480? 4: 1"
+              :max-visible-consecutive-page-buttons="maxVisibleConsecutivePageButtons"
               @pagechanged="onPageChange"
   />
 
 </template>
 
+<script>
+
+import { useSearchCharacters } from "@/componsable/useSearchCharacters";
+import { computed, ref } from "vue";
+import {
+  getFindCharacterByIdQuery,
+  getSearchCharactersByEpisodeQuery,
+  getSearchCharactersByNameQuery,
+  isByEpisodeSearch,
+  isByNameSearch
+} from "@/utils/graphQlUtils";
+import Pagination from "./Pagination";
+import SwitchField from "@/components/SwitchField";
+import { useFavourites } from "@/componsable/useFavourites";
+import SearchBar from "@/components/SearchBar";
+import { usePagination } from "@/componsable/usePagination";
+
+const NAME_SEARCH_KEY = "Name";
+const EPISODE_SEARCH_KEY = "Episode";
+const IDENTIFIER_SEARCH_KEY = "Identifier";
+const searchKeys = [NAME_SEARCH_KEY, EPISODE_SEARCH_KEY, IDENTIFIER_SEARCH_KEY]
+const ALL_CHARACTERS = 'All Characters'
+const FAVOURITES = 'Favourites'
+
+export default {
+  name: "CharacterList",
+  components: {
+    SearchBar,
+    SwitchField,
+    Pagination,
+  },
+
+  setup() {
+    const searchValue = ref("");
+    const searchKey = ref(NAME_SEARCH_KEY);
+    const favouriteCharacters = ref([]);
+    const currentlyOpenedTab = ref(ALL_CHARACTERS);
+
+    const query = computed(() => {
+      if (isByEpisodeSearch(searchKey.value)) {
+        return getSearchCharactersByEpisodeQuery(searchValue.value);
+      }
+      if (isByNameSearch(searchKey.value)) {
+        return getSearchCharactersByNameQuery(searchValue.value, currentPage.value);
+      }
+      return getFindCharacterByIdQuery(searchValue.value);
+    });
+    const charactersToDisplay = computed(() => {
+      if (currentlyOpenedTab.value === FAVOURITES) {
+        return favouriteCharacters.value;
+      } else {
+        return charactersListPerPageList.value.length ? charactersListPerPageList.value[currentPage.value - 1] :
+          charactersList.value;
+      }
+    });
+    const {
+      charactersList, charactersListPerPageList, count,
+      isLoading, error, search
+    } = useSearchCharacters(query);
+    const {
+      initFavourites, isFavourite, addToFavourites, removeFromFavourites
+    } = useFavourites(favouriteCharacters);
+    const {
+      currentPage,
+      totalPages,
+      maxVisibleConsecutivePageButtons
+    } = usePagination(count);
+
+    const onPageChange = (page) => {
+      currentPage.value = page;
+      if (isByNameSearch(searchKey.value)) {
+        search();
+      }
+    };
+    const onFieldSwitched = (selectedValue) => {
+      if (selectedValue === FAVOURITES) {
+        currentlyOpenedTab.value = FAVOURITES;
+      } else {
+        currentlyOpenedTab.value = ALL_CHARACTERS;
+      }
+    }
+    const onSearchClicked = (searchKeyToSet, searchValueToSet) => {
+      currentPage.value = 1;
+      searchKey.value = searchKeyToSet.value;
+      searchValue.value = searchValueToSet.value;
+      search();
+    };
+
+    initFavourites();
+    search();
+
+    return {
+      charactersToDisplay,
+      currentPage,
+      currentlyOpenedTab,
+      totalPages,
+      isLoading,
+      error,
+      favouriteCharacters,
+      maxVisibleConsecutivePageButtons,
+      isFavourite,
+      onPageChange,
+      onFieldSwitched,
+      onSearchClicked,
+      addToFavourites,
+      removeFromFavourites,
+      searchKeys,
+      ALL_CHARACTERS,
+      FAVOURITES
+    };
+  }
+};
+</script>
+
 <style scoped lang="scss">
 
-.image{
+.image {
   width: 100%;
 }
 
-.fixed-height{
+.fixed-height {
   height: 100%;
 }
+
 .navbar-wrapper {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
 }
+
 .switch-field-container {
- margin-top:30px;
+  margin-top: 30px;
 }
 
 .logo {
@@ -104,25 +220,27 @@
   height: 70px;
   margin: 40px 0 30px 20px;
 }
-@media screen and (min-width: 550px){
+
+@media screen and (min-width: 550px) {
   .navbar-wrapper {
     flex-direction: column;
     align-items: center;
   }
 }
+
 @media screen and (min-width: 810px) {
   .switch-field-container {
-    margin-top:0;
+    margin-top: 0;
     position: absolute;
     top: 150px
   }
-  .navbar-wrapper{
-    flex-direction:row;
+  .navbar-wrapper {
+    flex-direction: row;
     padding-bottom: 50px;
     margin: 32px 0 50px 50px;
     justify-content: initial;
   }
-  .logo{
+  .logo {
     margin: 0 40px 0 0;
   }
 }
@@ -208,117 +326,4 @@
   }
 }
 </style>
-
-<script>
-
-import { useSearchCharacters } from "@/componsable/useSearchCharacters";
-import { computed, ref } from "vue";
-import {
-  getFindCharacterByIdQuery,
-  getSearchCharactersByEpisodeQuery,
-  getSearchCharactersByNameQuery,
-  isByEpisodeSearch,
-  isByNameSearch
-} from "@/utils/graphQlUtils";
-import Pagination from "./Pagination";
-import SwitchField from "@/components/SwitchField";
-import { useFavourites } from "@/componsable/useFavourites";
-import SearchBar from "@/components/SearchBar";
-
-const NAME_SEARCH_KEY = "Name";
-const EPISODE_SEARCH_KEY = "Episode";
-const IDENTIFIER_SEARCH_KEY = "Identifier";
-const ITEMS_PER_PAGE = 20;
-const ALL_CHARACTERS = 'All Characters'
-const FAVOURITES = 'Favourites'
-
-export default {
-  name: "CharacterList",
-  components: {
-    SearchBar,
-    SwitchField,
-    Pagination,
-  },
-
-  setup() {
-    const currentPage = ref(1);
-    const searchValue = ref("");
-    const searchKey = ref(NAME_SEARCH_KEY);
-    const favouriteCharacters = ref([]);
-    const currentlyOpenedTab = ref('All Characters');
-
-    const query = computed(() => {
-      if (isByEpisodeSearch(searchKey.value)) {
-        return getSearchCharactersByEpisodeQuery(searchValue.value);
-      }
-      if (isByNameSearch(searchKey.value)) {
-        return getSearchCharactersByNameQuery(searchValue.value, currentPage.value);
-      }
-      return getFindCharacterByIdQuery(searchValue.value);
-    });
-    const charactersToDisplay = computed(() => {
-      if (currentlyOpenedTab.value === FAVOURITES) {
-        return favouriteCharacters.value;
-      } else {
-        return charactersListPerPageList.value.length ? charactersListPerPageList.value[currentPage.value - 1] :
-          charactersList.value;
-      }
-    });
-    const totalPages = computed(() => Math.ceil(count.value / ITEMS_PER_PAGE));
-    const screenWidth = computed(() => window.innerWidth);
-
-    const {
-      charactersList, charactersListPerPageList, count,
-      isLoading, error, search
-    } = useSearchCharacters(query);
-    const { initFavourites, isFavourite, addToFavourites, removeFromFavourites } = useFavourites(favouriteCharacters);
-
-    const onPageChange = (page) => {
-      currentPage.value = page;
-      if (isByNameSearch(searchKey.value)) {
-        search();
-      }
-    };
-    const onFieldSwitched = (selectedValue) => {
-      if (selectedValue === FAVOURITES) {
-        currentlyOpenedTab.value = FAVOURITES;
-      } else {
-        currentlyOpenedTab.value = ALL_CHARACTERS;
-      }
-    }
-    const onSearchClicked = (searchKeyToSet, searchValueToSet) => {
-      currentPage.value = 1;
-      searchKey.value = searchKeyToSet.value;
-      searchValue.value = searchValueToSet.value;
-      search();
-    };
-
-    initFavourites();
-    search();
-
-    return {
-      charactersToDisplay,
-      currentPage,
-      currentlyOpenedTab,
-      totalPages,
-      isLoading,
-      error,
-      favouriteCharacters,
-      screenWidth,
-      isFavourite,
-      onPageChange,
-      onFieldSwitched,
-      onSearchClicked,
-      addToFavourites,
-      removeFromFavourites,
-      NAME_SEARCH_KEY,
-      EPISODE_SEARCH_KEY,
-      IDENTIFIER_SEARCH_KEY,
-      ALL_CHARACTERS,
-      FAVOURITES
-    };
-  }
-};
-</script>
-
 

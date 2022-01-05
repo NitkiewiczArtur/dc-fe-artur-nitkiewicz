@@ -13,7 +13,6 @@ export function useSearchCharacters(query: Record<string, unknown> | Ref<Record<
   });
   const characters: CharactersResponse = reactive({ charactersList: [], charactersListPerPageList: [], count: 0})
 
-  //TODO:CHANGE PAGE I search
   const search = async () => {
     state.error = null;
     characters.charactersList = []
@@ -33,7 +32,7 @@ export function useSearchCharacters(query: Record<string, unknown> | Ref<Record<
         characters.count = response.data.data.characters.info.count;
       }else {
         // @ts-ignore
-        characters.charactersList = [response.data.data.character]
+        characters.charactersList.push(response.data.data.character)
         characters.count = 1
       }
     } catch (e) {

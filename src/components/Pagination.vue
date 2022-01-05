@@ -27,8 +27,8 @@
         </button>
       </li>
       <li v-if="showPagesInput">
-        <input style="width: 60px" type="number" v-model="manuallySelectedPage">
-        <button style="background-color: #11B0C8" @click="onClickPage(manuallySelectedPage)">Go to page</button>
+        <input class="go-to-page-input" type="number" v-model="manuallySelectedPage">
+        <button class="go-to-page-btn" @click="onClickPage(manuallySelectedPage)">Go to page</button>
       </li>
       <li class="pagination-item">
         <button
@@ -51,7 +51,7 @@ import { computed, ref } from "vue";
 export default {
   name: "Pagination",
   props: {
-    maxVisibleButtons: {
+    maxVisibleConsecutivePageButtons: {
       type: Number,
       required: false,
       default: 4
@@ -62,7 +62,8 @@ export default {
     },
     currentPage: {
       type: Number,
-      required: true
+      required: true,
+      default: 1
     },
   },
   setup(props, {emit}) {
@@ -72,8 +73,8 @@ export default {
       if (props.currentPage === 1) {
         return 1;
       }
-      if (props.currentPage > props.totalPages - props.maxVisibleButtons && props.totalPages > 5) {
-        return props.totalPages - props.maxVisibleButtons;
+      if (props.currentPage > props.totalPages - props.maxVisibleConsecutivePageButtons && props.totalPages > 5) {
+        return props.totalPages - props.maxVisibleConsecutivePageButtons;
       }
       return props.currentPage - 1;
     });
@@ -81,8 +82,8 @@ export default {
       const range = [];
 
       for (let i = startPage.value; i <= (
-        (startPage.value + props.maxVisibleButtons) !== props.totalPages ?
-          Math.min(startPage.value + props.maxVisibleButtons - 1, props.totalPages) :
+        (startPage.value + props.maxVisibleConsecutivePageButtons) !== props.totalPages ?
+          Math.min(startPage.value + props.maxVisibleConsecutivePageButtons - 1, props.totalPages) :
           props.totalPages
       );
            i++
@@ -93,7 +94,7 @@ export default {
         });
       }
 
-      if (startPage.value < props.totalPages - props.maxVisibleButtons) {
+      if (startPage.value < props.totalPages - props.maxVisibleConsecutivePageButtons) {
         range.push({
           name: "...",
           isDisabled: false
@@ -165,7 +166,12 @@ export default {
     color: #11B0C8;
   }
 }
-
+.go-to-page-input{
+  width: 60px
+}
+.go-to-page-btn{
+  background-color: #11B0C8
+}
 .active {
   background-color: #11B0C8;
   color: #ffffff;

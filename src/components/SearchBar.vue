@@ -12,15 +12,6 @@
         </template>
       </ul>
     </div>
-    <!--    <div class="searchBar__item searchBar__item&#45;&#45;dropdown"><p v-text="selectedSearchKey" />
-      <div class="dropdown-list">
-        <template v-for="searchKey in searchKeys" :key="searchKey">
-          <div class="dropdown-list__item">
-            <p @click="selectSearchKey(searchKey)">{{ searchKey }}</p>
-          </div>
-        </template>
-      </div>
-    </div>-->
     <div class="searchBar__item searchBar__item--input-container">
       <input class="searchBar__item__input" type="search" v-model="searchValue" />
       <i class="material-icons s blue searchBar__item__text" @click="onSearchFromStart" aria-hidden="true">search</i>
@@ -188,7 +179,10 @@ import { ref } from "vue";
 export default {
   name: "SearchBar",
   props: {
-    searchKeys:[],
+    searchKeys: {
+      type: Array,
+      required: true
+    },
   },
   setup(props, {emit}){
     const selectedSearchKey = ref(props.searchKeys[0])
