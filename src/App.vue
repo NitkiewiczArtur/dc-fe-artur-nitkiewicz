@@ -1,6 +1,6 @@
 <template>
   <div class="app">
-    <character-list></character-list>
+    <character-search></character-search>
   </div>
 </template>
 
@@ -16,8 +16,8 @@
 }
 </style>
 <script>
-import CharacterList from "@/components/CharacterList";
+import CharacterSearch from "@/components/CharacterSearch";
 export default {
-  components: { CharacterList }
+  components: { CharacterSearch }
 }
 </script>

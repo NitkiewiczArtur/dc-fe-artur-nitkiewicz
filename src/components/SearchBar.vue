@@ -16,14 +16,43 @@
       <input class="searchBar__item__input" type="search" v-model="searchValue" />
       <i class="material-icons s blue searchBar__item__text" @click="onSearchFromStart" aria-hidden="true">search</i>
     </div>
-
   </div>
 </template>
+
+<script>
+import { ref } from "vue";
+
+export default {
+  name: "SearchBar",
+  props: {
+    searchKeys: {
+      type: Array,
+      required: true
+    },
+  },
+  setup(props, {emit}){
+    const selectedSearchKey = ref(props.searchKeys[0])
+    const searchValue = ref('')
+    const selectSearchKey = (key) => {
+      selectedSearchKey.value = key
+    }
+    const onSearchFromStart = () => {
+      emit('searchClicked', selectedSearchKey, searchValue)
+    }
+    return{
+      selectedSearchKey,
+      searchValue,
+      selectSearchKey,
+      onSearchFromStart
+    }
+  }
+};
+</script>
 
 <style scoped lang="scss">
 .ddwn-menu {
   position: relative;
-display: flex;
+  display: flex;
   flex-direction: column;
   flex: auto;
   padding: 15px;
@@ -170,35 +199,5 @@ ul:hover{
   .input{
     width: 140px;
   }
-  }
+}
 </style>
-
-<script>
-import { ref } from "vue";
-
-export default {
-  name: "SearchBar",
-  props: {
-    searchKeys: {
-      type: Array,
-      required: true
-    },
-  },
-  setup(props, {emit}){
-    const selectedSearchKey = ref(props.searchKeys[0])
-    const searchValue = ref('')
-    const selectSearchKey = (key) => {
-      selectedSearchKey.value = key
-    }
-    const onSearchFromStart = () => {
-      emit('searchClicked', selectedSearchKey, searchValue)
-    }
-    return{
-      selectedSearchKey,
-      searchValue,
-      selectSearchKey,
-      onSearchFromStart
-    }
-  }
-};
-</script>

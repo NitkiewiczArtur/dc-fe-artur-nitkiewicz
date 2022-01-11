@@ -1,39 +1,45 @@
 import { reactive, Ref, toRefs } from "vue";
 import axios from "axios";
-// @ts-ignore
-import _ from "lodash";
+import { Store } from "vuex";
+
+import {
+  getCharacterFromSearchByIdResponse,
+  getCharactersCountFromSearchByEpisodeResponse,
+  getCharactersCountFromSearchByNameResponse,
+  getCharactersFromSearchByNameResponse,
+  getCharactersPaginatedFromSearchByEpisodeResponse
+} from "@/utils/graphQlUtils";
+import { CharactersQuery } from "@/types/CharactersQuery";
 
 const ENDPOINT = "https://rickandmortyapi.com/graphql";
 const ITEMS_PER_PAGE = 20;
 
-export function useSearchCharacters(query: Record<string, unknown> | Ref<Record<string, unknown>>) {
+export function useSearchCharacters(store: Store<any>, charactersQuery: Ref<CharactersQuery>) {
   const state = reactive({
     isLoading: true,
     error: null as any
   });
-  const characters: CharactersResponse = reactive({ charactersList: [], charactersListPerPageList: [], count: 0})
 
   const search = async () => {
     state.error = null;
-    characters.charactersList = []
-    characters.charactersListPerPageList = []
     state.isLoading = true;
+    await store.dispatch("characterModule/emptyCharactersAndCharactersFromEpisodeState");
     try {
-      const response = await axios.post(ENDPOINT, query.value);
-
-      // @ts-ignore
-      if (query.value.query.search("episode") === 5) {
-        characters.charactersListPerPageList =
-          _.chunk(response.data.data.episodes.results[0].characters, [ITEMS_PER_PAGE]);
-        characters.count = response.data.data.episodes.results[0].characters.length;
-        // @ts-ignore
-      } else if (query.value.query.search("characters") === 5){
-        characters.charactersList = response.data.data.characters.results
-        characters.count = response.data.data.characters.info.count;
-      }else {
-        // @ts-ignore
-        characters.charactersList.push(response.data.data.character)
-        characters.count = 1
+      const response = await axios.post(ENDPOINT, charactersQuery.value.query);
+      if (charactersQuery.value.searchKey === "Episode") {
+        await store.dispatch("characterModule/setCharactersFromEpisode",
+          getCharactersPaginatedFromSearchByEpisodeResponse(response, ITEMS_PER_PAGE));
+        await store.dispatch("characterModule/setCount",
+          getCharactersCountFromSearchByEpisodeResponse(response));
+      } else if (charactersQuery.value.searchKey === "Name") {
+        await store.dispatch("characterModule/setCharacters",
+          getCharactersFromSearchByNameResponse(response));
+        await store.dispatch("characterModule/setCount",
+          getCharactersCountFromSearchByNameResponse(response));
+      } else {
+        await store.dispatch("characterModule/setCharacters",
+          [getCharacterFromSearchByIdResponse(response)]);
+        await store.dispatch("characterModule/setCount", 1);
       }
     } catch (e) {
       state.error = e;
@@ -44,7 +50,6 @@ export function useSearchCharacters(query: Record<string, unknown> | Ref<Record<
 
   return {
     ...toRefs(state),
-    ...toRefs(characters),
     search
   }
 }

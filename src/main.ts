@@ -1,5 +1,6 @@
 import { createApp } from "vue";
 import App from "./App.vue";
-import "./registerServiceWorker";
+import store from "@/store";
+import _ from "lodash";
 
-createApp(App).mount("#app");
+createApp(App).use(store).use(_).mount("#app");
