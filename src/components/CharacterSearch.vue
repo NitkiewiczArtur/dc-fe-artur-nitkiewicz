@@ -1,12 +1,13 @@
 <template>
   <div class="navbar-wrapper">
-    <img class="logo" src="../assets/logo.png" alt="logo">
-    <div class="">
+    <img class="logo" src="../assets/logo.png" alt="logo"
+         @click="searchFromStart">
+    <div>
       <search-bar :search-keys="searchKeys"
-                  @searchClicked="onSearchClicked"></search-bar>
+                  @searchClicked="onSearchClicked" />
     </div>
     <div class="switch-field-container">
-      <switch-field @fieldSwitched="onFieldSwitched" :values="[ALL_CHARACTERS, FAVOURITES]"></switch-field>
+      <switch-field @fieldSwitched="onFieldSwitched" :values="[ALL_CHARACTERS, FAVOURITES]" />
     </div>
   </div>
   <character-table
@@ -32,14 +33,14 @@ import {
   getSearchCharactersByNameQuery,
   isByEpisodeSearch,
   isByNameSearch
-} from "@/utils/graphQlUtils";
-import Pagination from "./Pagination";
-import SwitchField from "@/components/SwitchField";
-import { useFavourites } from "@/componsable/useFavourites";
+} from "@/utils/rickAndMortyApiUtils";
 import SearchBar from "@/components/SearchBar";
+import SwitchField from "@/components/SwitchField";
+import CharacterTable from "@/components/CharacterTable";
+import Pagination from "./Pagination";
+import { useFavourites } from "@/componsable/useFavourites";
 import { usePagination } from "@/componsable/usePagination";
 import { useStore } from "vuex";
-import CharacterTable from "@/components/CharacterTable";
 
 const NAME_SEARCH_KEY = "Name";
 const EPISODE_SEARCH_KEY = "Episode";
@@ -64,7 +65,7 @@ export default {
     const currentlyOpenedTab = ref(ALL_CHARACTERS);
     const favouriteCharacters = computed(() => store.getters["characterModule/getFavouriteCharacters"]);
     const characters = computed(() => store.getters["characterModule/getCharacters"]);
-    const charactersFromEpisode = computed(() => store.getters["characterModule/getCharactersFromEpisode"]);
+    const charactersFromEpisodePaginated = computed(() => store.getters["characterModule/getCharactersFromEpisodePaginated"]);
     const count = computed(() => store.getters["characterModule/getCount"]);
 
     const query = computed(() => {
@@ -89,8 +90,8 @@ export default {
       if (currentlyOpenedTab.value === FAVOURITES) {
         return favouriteCharacters.value;
       } else {
-        return charactersFromEpisode.value.length ?
-          charactersFromEpisode.value[currentPage.value - 1] :
+        return charactersFromEpisodePaginated.value.length ?
+          charactersFromEpisodePaginated.value[currentPage.value - 1] :
           characters.value;
       }
     });
@@ -113,12 +114,18 @@ export default {
       }
     };
     const onFieldSwitched = (selectedValue) => {
-        currentlyOpenedTab.value = selectedValue;
-    }
+      currentlyOpenedTab.value = selectedValue;
+    };
     const onSearchClicked = (searchKeyToSet, searchValueToSet) => {
       currentPage.value = 1;
       searchKey.value = searchKeyToSet.value;
       searchValue.value = searchValueToSet.value;
+      search();
+    };
+    const searchFromStart = () => {
+      currentPage.value = 1;
+      searchKey.value = NAME_SEARCH_KEY;
+      searchValue.value = "";
       search();
     };
 
@@ -136,9 +143,10 @@ export default {
       onPageChange,
       onFieldSwitched,
       onSearchClicked,
+      searchFromStart,
       searchKeys,
       ALL_CHARACTERS,
-      FAVOURITES
+      FAVOURITES,
     };
   }
 };

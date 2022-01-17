@@ -2,7 +2,7 @@ import { Character } from "@/types/Character";
 
 const state = {
   favouriteCharacters: [],
-  charactersFromEpisode: [],
+  charactersFromEpisodePaginated: [],
   characters: [],
   count: Number
 };
@@ -10,14 +10,14 @@ const getters = {
   getFavouriteCharacters(state): Character[] {
     return state.favouriteCharacters;
   },
-  getCharactersFromEpisode(state): Character[] {
-    return state.charactersFromEpisode;
+  getCharactersFromEpisodePaginated(state): Character[][] {
+    return state.charactersFromEpisodePaginated;
   },
   getCharacters(state): Character[] {
     return state.characters;
   },
-  getCount(state){
-    return state.count
+  getCount(state): number {
+    return state.count;
   }
 };
 const mutations = {
@@ -30,15 +30,15 @@ const mutations = {
   removeFavouriteCharacter(state, characterToRemove: Character) {
     state.favouriteCharacters = state.favouriteCharacters.filter(character => character.id !== characterToRemove.id);
   },
-  setCharactersFromEpisode(state, charactersFromEpisode: Character[]) {
-    state.charactersFromEpisode = charactersFromEpisode;
+  setCharactersFromEpisodePaginated(state, charactersFromEpisode: Character[]) {
+    state.charactersFromEpisodePaginated = charactersFromEpisode;
   },
   setCharacters(state, characters: Character[]) {
     state.characters = characters;
   },
   emptyCharactersAndCharactersFromEpisodeState(state) {
     state.characters.length = 0;
-    state.charactersFromEpisode.length = 0
+    state.charactersFromEpisodePaginated.length = 0
     state.count = 0
   },
   setCount(state, count: number) {
@@ -67,8 +67,8 @@ const actions = {
   setCharacters({ commit }, characters: Character[]) {
     commit("setCharacters", characters);
   },
-  setCharactersFromEpisode({ commit }, characters: Character[]) {
-    commit("setCharactersFromEpisode", characters);
+  setCharactersFromEpisodePaginated({ commit }, charactersPaginated: Character[][]) {
+    commit("setCharactersFromEpisodePaginated", charactersPaginated);
   },
   setCount({ commit }, count: number) {
     commit("setCount", count);
@@ -76,8 +76,6 @@ const actions = {
   emptyCharactersAndCharactersFromEpisodeState({ commit}) {
     commit("emptyCharactersAndCharactersFromEpisodeState")
   }
-
-
 };
 export default {
   namespaced: true,

@@ -13,8 +13,11 @@
       </ul>
     </div>
     <div class="searchBar__item searchBar__item--input-container">
-      <input class="searchBar__item__input" type="search" v-model="searchValue" />
-      <i class="material-icons s blue searchBar__item__text" @click="onSearchFromStart" aria-hidden="true">search</i>
+      <input class="searchBar__item__input" type="search"
+             v-model="searchValue"
+             @keyup.enter="onSearchFromStart" />
+      <i class="material-icons s blue searchBar__item__text" aria-hidden="true"
+         @click="onSearchFromStart">search</i>
     </div>
   </div>
 </template>
@@ -133,6 +136,7 @@ ul:hover{
       min-width: 90px;
       outline: none;
       border: none;
+      color: #A9B1BD;
     }
 
     &__text {

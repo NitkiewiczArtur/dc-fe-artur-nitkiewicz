@@ -8,7 +8,7 @@ import {
   getCharactersCountFromSearchByNameResponse,
   getCharactersFromSearchByNameResponse,
   getCharactersPaginatedFromSearchByEpisodeResponse
-} from "@/utils/graphQlUtils";
+} from "@/utils/rickAndMortyApiUtils";
 import { CharactersQuery } from "@/types/CharactersQuery";
 
 const ENDPOINT = "https://rickandmortyapi.com/graphql";
@@ -27,7 +27,7 @@ export function useSearchCharacters(store: Store<any>, charactersQuery: Ref<Char
     try {
       const response = await axios.post(ENDPOINT, charactersQuery.value.query);
       if (charactersQuery.value.searchKey === "Episode") {
-        await store.dispatch("characterModule/setCharactersFromEpisode",
+        await store.dispatch("characterModule/setCharactersFromEpisodePaginated",
           getCharactersPaginatedFromSearchByEpisodeResponse(response, ITEMS_PER_PAGE));
         await store.dispatch("characterModule/setCount",
           getCharactersCountFromSearchByEpisodeResponse(response));
