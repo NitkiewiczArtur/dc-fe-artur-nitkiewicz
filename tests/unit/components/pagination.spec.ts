@@ -1,8 +1,6 @@
 import { mount } from "@vue/test-utils";
 import Pagination from "@/components/Pagination.vue";
 
-let wrapper: any;
-
 function findGotoPageButton(button: any): boolean {
   return button.text() === "...";
 }
@@ -22,6 +20,8 @@ function getPageToGoArgumentFromPageChangedEvents(wrapper: any, eventNumber: num
 function setCurrentPage(pageNumber:number){
   wrapper.setProps({ currentPage: pageNumber })
 }
+
+let wrapper: any;
 
 describe("Pagination.vue", () => {
   beforeEach(() => {

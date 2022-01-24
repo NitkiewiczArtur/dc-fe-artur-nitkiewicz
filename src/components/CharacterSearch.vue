@@ -7,7 +7,8 @@
                   @searchClicked="onSearchClicked" />
     </div>
     <div class="switch-field-container">
-      <switch-field @fieldSwitched="onFieldSwitched" :values="[ALL_CHARACTERS, FAVOURITES]" />
+      <switch-field @fieldSwitched="onFieldSwitched"
+                    :values="[ALL_CHARACTERS, FAVOURITES]" />
     </div>
   </div>
   <character-table

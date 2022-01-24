@@ -4,8 +4,7 @@
       <p>Search by</p>
     </div>
     <div class="ddwn-menu">
-      <div class="selected-key" v-text="selectedSearchKey">
-      </div>
+      <div class="selected-key" v-text="selectedSearchKey" />
       <ul>
         <template v-for="searchKey in searchKeys" :key="searchKey">
         <li @click="selectSearchKey(searchKey)">{{searchKey}}</li>

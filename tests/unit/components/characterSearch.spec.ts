@@ -3,17 +3,57 @@ import CharacterSearch from "@/components/CharacterSearch.vue";
 import SearchBar from "@/components/SearchBar.vue";
 import SwitchField from "@/components/SwitchField.vue";
 import Pagination from "@/components/Pagination.vue";
+import CharacterTable from "@/components/CharacterTable.vue";
+import { getTestCharacterList } from "../../utils/rickAndMortyApiTestUtils";
+import { createStore } from "vuex";
+import characterModule from "@/store/modules/character";
 
 let wrapper: any;
-//let mountFunction: (options?: object) => Wrapper<Vue>
 
 function setCurrentPage(pageNumber: number) {
   wrapper.setProps({ currentPage: pageNumber });
 }
 
+const mountFunction = (options = {}) => {
+  return mount(CharacterSearch, {
+    ...options
+  });
+};
+
 describe("CharacterSearch.vue", () => {
+  let actions;
+  let state;
+  let store;
   beforeEach(() => {
-    wrapper = mount(CharacterSearch);
+
+    /*  const characterList = getTestCharacterList(20);
+      const favouriteCharacterList = getTestCharacterList(5)
+
+      store.commit("characterModule/setCharacters", characterList);
+      store.commit("characterModule/setCount", characterList.length);
+      store.commit("characterModule/setFavouriteCharacters", favouriteCharacterList)*/
+    state = {
+      favouriteCharacters: getTestCharacterList(5),
+      charactersFromEpisodePaginated: [],
+      characters: getTestCharacterList(20),
+      count: 20
+    };
+    store = createStore({
+      modules: {
+        characterModule: {
+          state: state,
+          actions: characterModule.actions,
+          getters: characterModule.getters,
+          mutations: characterModule.mutations,
+          namespaced: true
+        }
+      }
+    });
+    wrapper = mount(CharacterSearch, {
+      global: {
+        plugins: [store]
+      }
+    });
   });
 
   describe("Rendering", () => {
@@ -22,7 +62,7 @@ describe("CharacterSearch.vue", () => {
       const logo = wrapper.find(".logo");
       const searchBar = wrapper.findComponent(SearchBar);
       const switchField = wrapper.findComponent(SwitchField);
-      const table = wrapper.find("table");
+      const table = wrapper.findComponent(CharacterTable);
       const pagination = wrapper.findComponent(Pagination);
 
       expect(logo.exists()).toBeTruthy();
@@ -32,13 +72,4 @@ describe("CharacterSearch.vue", () => {
       expect(pagination.exists()).toBeTruthy();
     });
   });
-
-  //TODO: switch changes list of characters
-  //TODO: changing page works
-  //TODO: adding to favourites works
-
-  it("", () =>{
-    wrapper
-  })
-
 });

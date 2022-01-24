@@ -4,5 +4,5 @@ export interface Character {
   image: string,
   gender: string,
   species: string,
-  episode: []
+  episode: Record<string, unknown>[]
 }

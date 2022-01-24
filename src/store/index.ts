@@ -1,5 +1,5 @@
 import { createLogger, createStore } from "vuex";
-import characterModule from "./modules/character";
+import characterModule from "@/store/modules/character";
 
 const debug = process.env.NODE_ENV !== 'production'
 
