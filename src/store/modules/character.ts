@@ -75,7 +75,7 @@ const actions = {
   },
   emptyCharactersAndCharactersFromEpisodeState({ commit}) {
     commit("emptyCharactersAndCharactersFromEpisodeState")
-  }
+  },
 };
 export default {
   namespaced: true,

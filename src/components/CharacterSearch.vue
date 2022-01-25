@@ -13,7 +13,7 @@
   </div>
   <character-table
     :characters-to-display="charactersToDisplay"
-    :is-loading="isLoading"
+    :show-loading-image="isLoading && currentlyOpenedTab !== FAVOURITES"
     :error="error"
   />
   <pagination v-show="currentlyOpenedTab !== FAVOURITES"
@@ -169,16 +169,17 @@ export default {
   width: 240px;
   height: 70px;
   margin: 40px 0 30px 20px;
+  cursor: pointer;
 }
 
-@media screen and (min-width: 550px) {
+@media screen and (min-width: 520px) {
   .navbar-wrapper {
     flex-direction: column;
     align-items: center;
   }
 }
 
-@media screen and (min-width: 810px) {
+@media screen and (min-width: 880px) {
   .switch-field-container {
     margin-top: 0;
     position: absolute;
@@ -191,7 +192,7 @@ export default {
     justify-content: initial;
   }
   .logo {
-    margin: 0 40px 0 0;
+    margin: 0 40px 0 93px;
   }
 }
 

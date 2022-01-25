@@ -51,7 +51,7 @@
       </tr>
       </tbody>
     </table>
-    <div class="container" v-if="isLoading">
+    <div class="container" v-if="showLoadingImage">
       <img class="image" src="../assets/zmiana-programu.jpg" alt="Image of exhausted Morty">
     </div>
     <div class="container" v-else-if="error">
@@ -72,7 +72,7 @@ export default {
       type: Array,
       required: true
     },
-    isLoading: {
+    showLoadingImage: {
       type: Boolean
     },
     error:{

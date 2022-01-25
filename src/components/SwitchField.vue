@@ -1,5 +1,5 @@
 <template>
-  <div class="switch-field font-color">
+  <div class="switch-field">
     <input type="radio" :id="firstValue" v-model="selectedValue" :value="firstValue" checked />
     <label :for="firstValue">{{ firstValue }}</label>
     <template v-for="value in restOfValues" :key="value">
@@ -43,7 +43,11 @@ export default {
   margin-bottom: 36px;
   overflow: hidden;
 }
-
+@media screen and (min-width: 880px) {
+  .switch-field {
+    margin: 0 0 36px 93px;
+  }
+}
 .switch-field input {
   position: absolute !important;
   clip: rect(0, 0, 0, 0);
@@ -54,7 +58,7 @@ export default {
 }
 
 .switch-field label {
-  color: rgba(0, 0, 0, 0.6);
+  color: #A9B1BD;
   font-size: 14px;
   line-height: 1;
   text-align: center;
@@ -68,6 +72,7 @@ export default {
 }
 
 .switch-field input:checked + label {
+  color: #11B0C8;
   border-bottom: #11B0C8 solid 2px;
 }
 </style>

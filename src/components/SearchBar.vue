@@ -59,34 +59,54 @@ export default {
   flex: auto;
   padding: 15px;
   border-right: solid 2px #A9B1BD;
-  min-width: 71px
+  min-width: 71px;
 }
-ul{
+.selected-key{
+  min-width: 94px;
+}
+ul {
   margin: 0;
   display: none;
   position: absolute;
   top: 58px;
   left: -2px;
   transition-delay: 2s;
-  padding: 15px 15px 0 15px;
+  padding: 0;
   border-right: solid 2px #A9B1BD;
   border-left: solid 2px #A9B1BD;
   border-bottom: solid 2px #A9B1BD;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
   background-color: white;
 }
+
 ul li {
   list-style: none;
   text-align: left;
   display: flex;
   justify-content: space-between;
-  min-height: 50px;
+  min-height: 40px;
+  padding: 15px 15.5px 0 15px;
+  border-bottom: solid 2px #A9B1BD;
 }
-ul:hover{
+li:last-child {
+  border-bottom: none;
+}
+
+ul:hover {
   display: flex;
 }
+
 .ddwn-menu:hover ul {
   display: block;
+  cursor: pointer;
 }
+
+i {
+  cursor: pointer;
+  color: #11B0C8;
+}
+
 .searchBar {
   max-width: 300px;
   list-style: none;
@@ -95,8 +115,8 @@ ul:hover{
   border-radius: 10px;
   border: solid 2px #A9B1BD;
   box-sizing: unset;
-
   min-width: 220px;
+  cursor: default;
 
   &__item {
     padding-left: 20px;
