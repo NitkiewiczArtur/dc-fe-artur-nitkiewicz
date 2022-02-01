@@ -47,12 +47,9 @@ const mutations = {
 };
 const actions = {
   initFavouriteCharacters({ commit }) {
-    const favouriteCharactersFromLocalStorage = localStorage.getItem("favouriteCharacters") !== "undefined" ?
-      JSON.parse(
+    const favouriteCharactersFromLocalStorage = JSON.parse(
         localStorage.getItem("favouriteCharacters"))
-      :
-      [];
-    commit("setFavouriteCharacters", favouriteCharactersFromLocalStorage);
+    commit("setFavouriteCharacters", favouriteCharactersFromLocalStorage ? favouriteCharactersFromLocalStorage : []);
   },
   addFavouriteCharacter({ commit }, characterToAdd): Promise<any> {
     return new Promise((resolve) => {
