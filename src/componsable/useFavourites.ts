@@ -2,7 +2,7 @@ import { Character } from "@/types/Character";
 import {computed, ComputedRef} from "vue";
 
 export function useFavourites(store) {
-  const favouriteCharacters: ComputedRef<any> =
+  const favouriteCharacters: ComputedRef<Character[]> =
       computed(()=> store.getters["characterModule/getFavouriteCharacters"]);
 
   const initFavouriteCharacters = () => {
