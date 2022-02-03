@@ -1,9 +1,9 @@
 <template>
-  <div class="table-wrap fixed-height">
-    <table class="table table-borderless font-color">
-      <thead class="color-blue">
+  <div class="container">
+    <table class="font-color" style="width: 100vw">
+      <thead class="table-header-row">
       <tr>
-        <th></th>
+        <th class="first-empty-header"></th>
         <th>Photo</th>
         <th>Character ID</th>
         <th>Name</th>
@@ -15,23 +15,23 @@
       </tr>
       </thead>
       <tbody>
-      <tr class="border-bottom" v-for="character in charactersToDisplay" :key="character.id">
-        <td style="padding-left: 5vw"></td>
+      <tr v-for="character in charactersToDisplay" :key="character.id">
+        <td></td>
         <td>
           <img style="height: 68px;" :src="character.image" alt="character img">
         </td>
-        <td>{{character.id}}</td>
+        <td>{{ character.id }}</td>
         <td>
-          {{character.name}}
+          {{ character.name }}
         </td>
         <td>
-          {{character.gender}}
+          {{ character.gender }}
         </td>
         <td>
-          {{character.species}}
+          {{ character.species }}
         </td>
         <td>
-          {{character.episode[character.episode.length-1].episode}}
+          {{ character.episode[character.episode.length - 1].episode }}
         </td>
         <td v-if="isFavourite(character)">
           <button class="favourite-btn favourite-btn--isFavourite"
@@ -47,23 +47,23 @@
             </i>
           </button>
         </td>
-        <td />
+        <td/>
       </tr>
       </tbody>
     </table>
-    <div class="container" v-if="showLoadingImage">
-      <img class="image" src="../assets/zmiana-programu.jpg" alt="Image of exhausted Morty">
+    <div v-if="showLoadingImage">
+      <img class="loading-image" src="../assets/zmiana-programu.jpg" alt="Image of exhausted Morty">
     </div>
-    <div class="container" v-else-if="error">
+    <div style="text-align: end" v-else-if="error">
       {{ error }}
-      <img class="image" src="../assets/wrong-morty.jpg" alt="Image of confused Morty">
+      <img class="error-image" src="../assets/wrong-morty.jpg" alt="Image of confused Morty">
     </div>
   </div>
 </template>
 
 <script>
-import { useFavourites } from "@/componsable/useFavourites";
-import { useStore } from "vuex";
+import {useFavourites} from "@/componsable/useFavourites";
+import {useStore} from "vuex";
 
 export default {
   name: "CharacterTable",
@@ -75,7 +75,7 @@ export default {
     showLoadingImage: {
       type: Boolean
     },
-    error:{
+    error: {
       type: Error
     }
   },
@@ -93,21 +93,43 @@ export default {
 
 <style scoped lang="scss">
 
-.image {
-  width: 100%;
+.loading-image {
+  width: 60vw;
+  margin-left: 20vw;
 }
 
-.fixed-height {
+.error-image {
+  width: 20vw;
+  margin-left: 40vw;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
   height: 100%;
-}
+  width: 100%;
+  padding: 0;
 
-.color-blue {
-  background-color: rgb(229, 234, 244, 0.25)
+  thead tr {
+    height: 3.5rem;
+    background-color: rgb(229, 234, 244, 0.25);
+    border-bottom: none;
+  }
+
+  th {
+    width: 10vw;
+  }
+
+  tr {
+    height: 5.5rem;
+    border-bottom: #A9B1BD solid 0.1px;
+  }
 }
 
 .favourite-btn {
-  width: 40px;
-  height: 40px;
+  width: 2.5rem;
+  height: 2.5rem;
   background-color: white;
   color: #11B0C8;
   border: #11B0C8 solid 3px;
@@ -125,11 +147,54 @@ export default {
   border-bottom: #A9B1BD solid 0.25px;
 }
 
-@media (max-width: 767px) {
-  .searchBar {
-    left: 80px;
-    top: 138px;
+.first-empty-header {
+  width: 9rem
+}
+
+@media screen and (max-width: 590px) {
+  thead {
+    display: none;
   }
+  .container {
+    tr {
+      display: flex;
+      flex-direction: column;
+      height: 18rem;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+  .first-empty-header {
+    display: none;
+  }
+}
+
+/*.photo-header{
+
+}
+.id-header{
+
+}
+.name-header{
+
+}
+.gender-header{
+
+}
+.species-header{
+
+}
+.episode-header{
+
+}
+.favourite-header{
+
+}*/
+/*@media (max-width: 767px) {
+  !* .searchBar {
+     left: 80px;
+     top: 138px;
+   }*!
   .table-wrap table,
   .table-wrap thead,
   .table-wrap tbody,
@@ -153,8 +218,8 @@ export default {
   }
   .table-wrap td:before {
     position: absolute;
-    top: 8px;
-    left: 15px;
+    top: 0.5rem;
+    left: 1rem;
     width: 45%;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -163,13 +228,13 @@ export default {
     font-weight: bold;
   }
   .table-wrap td:first-child {
-    padding-top: 17px;
+    padding-top: 1rem;
   }
   .table-wrap td:last-child {
-    padding-bottom: 16px;
+    padding-bottom: 1rem;
   }
   .table-wrap td:first-child:before {
-    top: 17px;
+    top: 1rem;
   }
   .table-wrap td:before {
     content: attr(data-title);
@@ -180,5 +245,5 @@ export default {
   .table tbody tr td {
     border: none;
   }
-}
+}*/
 </style>

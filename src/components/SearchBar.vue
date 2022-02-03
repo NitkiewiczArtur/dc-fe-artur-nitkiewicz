@@ -4,25 +4,29 @@
       <p>Search by</p>
     </div>
     <div class="ddwn-menu">
-      <div class="selected-key" v-text="selectedSearchKey" />
+      <div class="selected-key">
+        <p v-text="selectedSearchKey"/>
+        ▼
+      </div>
       <ul>
         <template v-for="searchKey in searchKeys" :key="searchKey">
-        <li @click="selectSearchKey(searchKey)">{{searchKey}}</li>
+          <li @click="selectSearchKey(searchKey)">{{ searchKey }}</li>
         </template>
       </ul>
     </div>
     <div class="searchBar__item searchBar__item--input-container">
       <input class="searchBar__item__input" type="search"
              v-model="searchValue"
-             @keyup.enter="onSearchFromStart" />
-      <i class="material-icons s blue searchBar__item__text" aria-hidden="true"
+             @keyup.enter="onSearchFromStart"/>
+      <i class="material-icons s blue searchBar__item__icon"
+         aria-hidden="true"
          @click="onSearchFromStart">search</i>
     </div>
   </div>
 </template>
 
 <script>
-import { ref } from "vue";
+import {ref} from "vue";
 
 export default {
   name: "SearchBar",
@@ -32,7 +36,7 @@ export default {
       required: true
     },
   },
-  setup(props, {emit}){
+  setup(props, {emit}) {
     const selectedSearchKey = ref(props.searchKeys[0])
     const searchValue = ref('')
     const selectSearchKey = (key) => {
@@ -41,7 +45,7 @@ export default {
     const onSearchFromStart = () => {
       emit('searchClicked', selectedSearchKey, searchValue)
     }
-    return{
+    return {
       selectedSearchKey,
       searchValue,
       selectSearchKey,
@@ -57,18 +61,24 @@ export default {
   display: flex;
   flex-direction: column;
   flex: auto;
-  padding: 15px;
+  padding: 1rem 1rem 0 1rem;
   border-right: solid 2px #A9B1BD;
-  min-width: 71px;
+  max-width: 6.5rem;
+  min-width: 6.5rem;
+  width: 6.5rem;
 }
-.selected-key{
-  min-width: 94px;
+
+.selected-key {
+  min-width: 6.5rem;
+  width: 6.5rem;
+  display: flex;
 }
+
 ul {
   margin: 0;
   display: none;
   position: absolute;
-  top: 58px;
+  top: 3.63rem;
   left: -2px;
   transition-delay: 2s;
   padding: 0;
@@ -85,10 +95,13 @@ ul li {
   text-align: left;
   display: flex;
   justify-content: space-between;
-  min-height: 40px;
-  padding: 15px 15.5px 0 15px;
+  height: 2.5rem;
+  max-height: 2.5rem;
+  width: 6.5rem;
+  padding: 1rem 1rem 0 1rem;
   border-bottom: solid 2px #A9B1BD;
 }
+
 li:last-child {
   border-bottom: none;
 }
@@ -102,20 +115,13 @@ ul:hover {
   cursor: pointer;
 }
 
-i {
-  cursor: pointer;
-  color: #11B0C8;
-}
-
 .searchBar {
-  max-width: 300px;
   list-style: none;
   display: flex;
   padding: 0;
   border-radius: 10px;
   border: solid 2px #A9B1BD;
   box-sizing: unset;
-  min-width: 220px;
   cursor: default;
 
   &__item {
@@ -125,8 +131,7 @@ i {
     align-content: center;
     flex-direction: column;
     border-right: solid 2px #A9B1BD;
-    height: 56px;
-    min-width: 80px;
+    height: 3.5rem;
 
     &:hover {
       color: #A9B1BD;
@@ -145,82 +150,49 @@ i {
       justify-content: space-between;
     }
 
-    &--dropdown {
-      width: 100px;
-      padding-left: 20px;
-    }
-
     &__input {
-      width: 30vw;
-      min-width: 90px;
       outline: none;
       border: none;
       color: #A9B1BD;
+      max-width: 7.5rem;
     }
 
-    &__text {
-      padding-top: 15px;
+    &__icon {
+      padding: 1rem 1.25rem 0 0;
+      font-size: 2rem;
+      cursor: pointer;
+      color: #11B0C8;
     }
 
     &:last-child {
       border-right: none;
     }
-
-    &:hover .dropdown-list__item {
-      display: flex;
-      justify-content: center;
-      align-content: center;
-      flex-direction: column;
-      top: 0;
-      height: 54px;
-      border-bottom: solid 2px #A9B1BD;
-    }
-
-    &:hover .dropdown-list {
-      border: solid 2px #A9B1BD;
-    }
   }
 }
 
-.input {
-  width: 15vw;
-}
-
-.dropdown-list {
-  position: relative;
-  top: 100px;
-  left: -20px;
-  flex-direction: column;
-  width: 128px;
-  padding-left: 20px;
-  background-color: white;
-
-  &__item {
-    display: none;
+@media screen and (min-width: 932px) {
+  .selected-key{
+    justify-content: space-between;
   }
 
-  &:hover {
-    border: solid 2px #A9B1BD;
-  }
-}
-
-@media screen and (min-width: 810px) {
   .searchBar {
-    max-width: 400px;
-
+    max-width: 31.5rem;
     &__item {
       &--title {
         display: flex;
-        min-width: 100px;
+        width: 6.5rem;
+        min-width: 6.5rem;
         justify-content: center;
+      }
+
+      &__input {
+        max-width: 11.25rem;
       }
     }
   }
+
   *, ::after, ::before {
     box-sizing: content-box;
-  }
-  .input{
-    width: 140px;
   }
 }
 </style>

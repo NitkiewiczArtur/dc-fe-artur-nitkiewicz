@@ -4,17 +4,17 @@
          @click="searchFromStart">
     <div>
       <search-bar :search-keys="searchKeys"
-                  @searchClicked="onSearchClicked" />
+                  @searchClicked="onSearchClicked"/>
     </div>
     <div class="switch-field-container">
       <switch-field @fieldSwitched="onFieldSwitched"
-                    :values="[ALL_CHARACTERS, FAVOURITES]" />
+                    :values="[ALL_CHARACTERS, FAVOURITES]"/>
     </div>
   </div>
   <character-table
-    :characters-to-display="charactersToDisplay"
-    :show-loading-image="isLoading && currentlyOpenedTab !== FAVOURITES"
-    :error="error"
+      :characters-to-display="charactersToDisplay"
+      :show-loading-image="isLoading && currentlyOpenedTab !== FAVOURITES"
+      :error="error"
   />
   <pagination v-show="currentlyOpenedTab !== FAVOURITES"
               :totalPages="totalPages"
@@ -26,8 +26,8 @@
 
 <script>
 
-import { useSearchCharacters } from "@/componsable/useSearchCharacters";
-import { computed, ref } from "vue";
+import {useSearchCharacters} from "@/componsable/useSearchCharacters";
+import {computed, ref} from "vue";
 import {
   getFindCharacterByIdQuery,
   getSearchCharactersByEpisodeQuery,
@@ -39,9 +39,9 @@ import SearchBar from "@/components/SearchBar";
 import SwitchField from "@/components/SwitchField";
 import CharacterTable from "@/components/CharacterTable";
 import Pagination from "./Pagination";
-import { useFavourites } from "@/componsable/useFavourites";
-import { usePagination } from "@/componsable/usePagination";
-import { useStore } from "vuex";
+import {useFavourites} from "@/componsable/useFavourites";
+import {usePagination} from "@/componsable/usePagination";
+import {useStore} from "vuex";
 
 const NAME_SEARCH_KEY = "Name";
 const EPISODE_SEARCH_KEY = "Episode";
@@ -92,8 +92,8 @@ export default {
         return favouriteCharacters.value;
       } else {
         return charactersFromEpisodePaginated.value.length ?
-          charactersFromEpisodePaginated.value[currentPage.value - 1] :
-          characters.value;
+            charactersFromEpisodePaginated.value[currentPage.value - 1] :
+            characters.value;
       }
     });
     const {
@@ -162,13 +162,13 @@ export default {
 }
 
 .switch-field-container {
-  margin-top: 30px;
+  margin-top: 2rem;
 }
 
 .logo {
-  width: 240px;
-  height: 70px;
-  margin: 40px 0 30px 20px;
+  width: 15rem;
+  height: 4.4rem;
+  margin: 2.5rem 0 1rem 1.25rem;
   cursor: pointer;
 }
 
@@ -183,16 +183,19 @@ export default {
   .switch-field-container {
     margin-top: 0;
     position: absolute;
-    top: 150px
+    top: 10rem
+  }
+  .switch-field {
+    margin: 0 0 2rem 5rem
   }
   .navbar-wrapper {
     flex-direction: row;
-    padding-bottom: 50px;
-    margin: 32px 0 50px 50px;
+    padding-bottom: 3.2rem;
+    margin: 2rem 0 5rem 3.13rem;
     justify-content: initial;
   }
   .logo {
-    margin: 0 40px 0 93px;
+    margin: 0 5.3rem 0 6rem;
   }
 }
 
