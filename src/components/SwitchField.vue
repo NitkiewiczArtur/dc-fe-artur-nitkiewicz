@@ -40,13 +40,8 @@ export default {
 <style scoped>
 .switch-field {
   display: flex;
-  margin-bottom: 36px;
+  margin-bottom: 2rem;
   overflow: hidden;
-}
-@media screen and (min-width: 880px) {
-  .switch-field {
-    margin: 0 0 36px 93px;
-  }
 }
 .switch-field input {
   position: absolute !important;
@@ -62,8 +57,7 @@ export default {
   font-size: 14px;
   line-height: 1;
   text-align: center;
-  padding: 8px 16px;
-  margin-right: -1px;
+  margin: 8px 16px;
   transition: all 0.1s ease-in-out;
 }
 
@@ -74,5 +68,14 @@ export default {
 .switch-field input:checked + label {
   color: #11B0C8;
   border-bottom: #11B0C8 solid 2px;
+}
+@media screen and (min-width: 880px) {
+  .switch-field {
+    margin: 0 0 2rem 5.8rem;
+  }
+  .switch-field label {
+    padding: 0.5rem 0;
+    margin-right: 5rem;
+  }
 }
 </style>

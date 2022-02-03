@@ -6,7 +6,7 @@
           type="button"
           class="page-btn page-btn--change-page"
           @click="onClickPreviousPage"
-          :disabled="isInFirstPage"
+          :disabled="isOnFirstPage"
         >
           &#9668;
         </button>
@@ -35,7 +35,7 @@
           type="button"
           class="page-btn page-btn--change-page"
           @click="onClickNextPage"
-          :disabled="isInLastPage"
+          :disabled="isOnLastPage"
         >
           &#9658;
         </button>
@@ -106,10 +106,10 @@ export default {
       }
       return range;
     });
-    const isInFirstPage = computed(() => {
+    const isOnFirstPage = computed(() => {
       return props.currentPage === 1;
     });
-    const isInLastPage = computed(() => {
+    const isOnLastPage = computed(() => {
       return props.currentPage === props.totalPages;
     });
 
@@ -132,8 +132,8 @@ export default {
     return {
       pages,
       showPagesInput,
-      isInFirstPage,
-      isInLastPage,
+      isOnFirstPage,
+      isOnLastPage,
       manuallySelectedPage,
       onClickPreviousPage,
       onClickNextPage,
@@ -146,6 +146,9 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.container{
+  margin-left: 3rem;
+}
 .pagination {
   list-style-type: none;
 }
@@ -154,9 +157,9 @@ export default {
   display: inline-block;
 }
 .page-btn {
-  margin: 0 8px;
-  height: 40px;
-  width: 40px;
+  margin: 0 0.5rem;
+  height: 2.5rem;
+  width: 2.5rem;
   border-radius: 5px;
   background-color: white;
   border: solid 2px #A9B1BD;
@@ -167,7 +170,7 @@ export default {
   }
 }
 .go-to-page-input{
-  width: 60px
+  width: 3.75rem
 }
 .go-to-page-btn{
   background-color: #11B0C8
@@ -175,5 +178,10 @@ export default {
 .active {
   background-color: #11B0C8;
   color: #ffffff;
+}
+@media screen and (min-width: 880px) {
+  .container {
+    margin-left: 8rem;
+  }
 }
 </style>

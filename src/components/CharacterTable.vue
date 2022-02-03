@@ -106,8 +106,8 @@ export default {
 }
 
 .favourite-btn {
-  width: 40px;
-  height: 40px;
+  width: 2.5rem;
+  height: 2.5rem;
   background-color: white;
   color: #11B0C8;
   border: #11B0C8 solid 3px;
@@ -126,10 +126,10 @@ export default {
 }
 
 @media (max-width: 767px) {
-  .searchBar {
+ /* .searchBar {
     left: 80px;
     top: 138px;
-  }
+  }*/
   .table-wrap table,
   .table-wrap thead,
   .table-wrap tbody,
@@ -153,8 +153,8 @@ export default {
   }
   .table-wrap td:before {
     position: absolute;
-    top: 8px;
-    left: 15px;
+    top: 0.5rem;
+    left: 1rem;
     width: 45%;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -163,13 +163,13 @@ export default {
     font-weight: bold;
   }
   .table-wrap td:first-child {
-    padding-top: 17px;
+    padding-top: 1rem;
   }
   .table-wrap td:last-child {
-    padding-bottom: 16px;
+    padding-bottom: 1rem;
   }
   .table-wrap td:first-child:before {
-    top: 17px;
+    top: 1rem;
   }
   .table-wrap td:before {
     content: attr(data-title);
