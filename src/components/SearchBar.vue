@@ -158,7 +158,7 @@ ul:hover {
     }
 
     &__icon {
-      padding: 1rem 1.25rem 0 0;
+      padding: 0.7rem 1.25rem 0 0;
       font-size: 2rem;
       cursor: pointer;
       color: #11B0C8;
@@ -170,7 +170,7 @@ ul:hover {
   }
 }
 
-@media screen and (min-width: 932px) {
+@media screen and (min-width: 1000px) {
   .selected-key{
     justify-content: space-between;
   }

@@ -54,8 +54,8 @@
     <div v-if="showLoadingImage">
       <img class="loading-image" src="../assets/zmiana-programu.jpg" alt="Image of exhausted Morty">
     </div>
-    <div style="text-align: end" v-else-if="error">
-      {{ error }}
+    <div class="error-wrapper" v-else-if="error">
+      <div v-text="error"></div>
       <img class="error-image" src="../assets/wrong-morty.jpg" alt="Image of confused Morty">
     </div>
   </div>
@@ -100,7 +100,12 @@ export default {
 
 .error-image {
   width: 20vw;
-  margin-left: 40vw;
+}
+
+.error-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .container {
@@ -168,82 +173,4 @@ export default {
     display: none;
   }
 }
-
-/*.photo-header{
-
-}
-.id-header{
-
-}
-.name-header{
-
-}
-.gender-header{
-
-}
-.species-header{
-
-}
-.episode-header{
-
-}
-.favourite-header{
-
-}*/
-/*@media (max-width: 767px) {
-  !* .searchBar {
-     left: 80px;
-     top: 138px;
-   }*!
-  .table-wrap table,
-  .table-wrap thead,
-  .table-wrap tbody,
-  .table-wrap th,
-  .table-wrap td,
-  .table-wrap tr {
-    display: block;
-  }
-  .table-wrap thead tr {
-    position: absolute;
-    top: -9999px;
-    left: -9999px;
-  }
-  .table-wrap td {
-    border: none;
-    border-bottom: 1px solid #eee;
-    position: relative;
-    padding-left: 40% !important;
-    white-space: normal;
-    text-align: left;
-  }
-  .table-wrap td:before {
-    position: absolute;
-    top: 0.5rem;
-    left: 1rem;
-    width: 45%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    text-align: left;
-    font-weight: bold;
-  }
-  .table-wrap td:first-child {
-    padding-top: 1rem;
-  }
-  .table-wrap td:last-child {
-    padding-bottom: 1rem;
-  }
-  .table-wrap td:first-child:before {
-    top: 1rem;
-  }
-  .table-wrap td:before {
-    content: attr(data-title);
-  }
-  .table tbody tr {
-    border-top: 1px solid #ddd;
-  }
-  .table tbody tr td {
-    border: none;
-  }
-}*/
 </style>

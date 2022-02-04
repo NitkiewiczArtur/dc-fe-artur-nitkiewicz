@@ -9,7 +9,7 @@ npm run serve
 
 ### link to deployed app
 
-https://61d33ed56f54ffd14a2aa9e7--eager-feynman-2c20b9.netlify.app/
+https://61fd43db8a7a1a2a0d5fd1a5--niciu.netlify.app/
 
 ### Built With
 
