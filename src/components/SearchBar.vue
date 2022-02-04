@@ -97,7 +97,7 @@ ul li {
   justify-content: space-between;
   height: 2.5rem;
   max-height: 2.5rem;
-  width: 6.5rem;
+  width: 6.38rem;
   padding: 1rem 1rem 0 1rem;
   border-bottom: solid 2px #A9B1BD;
 }
@@ -173,6 +173,10 @@ ul:hover {
 @media screen and (min-width: 1000px) {
   .selected-key{
     justify-content: space-between;
+  }
+
+  ul li {
+    width: 6.47rem;
   }
 
   .searchBar {
